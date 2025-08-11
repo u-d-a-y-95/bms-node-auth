@@ -1,24 +1,18 @@
-import express, { ErrorRequestHandler } from "express";
-import { HttpError } from "./error";
-import { logger } from "./logger";
+import "reflect-metadata";
+import express, { Response, Request, NextFunction } from "express";
+import { routes } from "./routes";
+import {
+  errorMiddleware,
+  responseMiddleware,
+} from "@/lib/middlewares/response.middleware";
 
 export const app = express();
 
 app.use(express.json());
+app.use(responseMiddleware);
+app.use(routes);
+app.get("/", (_req: Request, res: Response, _next: NextFunction) => {
+  res.success({ data: "hello" });
+});
 
-app.use(((error, _req, res, _next) => {
-  logger.error(error);
-
-  if (error instanceof HttpError) {
-    res.status(error.status).json({
-      status: error.status,
-      message: error.message,
-    });
-    return;
-  }
-
-  res.status(500).json({
-    status: 500,
-    message: "Internal Server Error",
-  });
-}) satisfies ErrorRequestHandler);
+app.use(errorMiddleware);
