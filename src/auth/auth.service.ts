@@ -1,4 +1,6 @@
 import { injectable } from "tsyringe";
 
 @injectable()
-export class AuthService {}
+export class AuthService {
+  register() {}
+}

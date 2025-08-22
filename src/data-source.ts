@@ -9,7 +9,7 @@ export const dataSource = new DataSource({
   password: CONFIG.DB_PASSWORD,
   database: CONFIG.DB_NAME,
   synchronize: true,
-  entities: [],
+  entities: ["src/**/*.entity.ts"],
   subscribers: [],
   migrations: [],
 });

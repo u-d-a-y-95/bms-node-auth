@@ -24,8 +24,9 @@ export function validate<T extends object>(dtoClass: ClassConstructor<T>) {
           details: formattedErrors,
         },
       });
+    } else {
+      req.body = dto;
+      next();
     }
-    req.body = dto;
-    next();
   };
 }

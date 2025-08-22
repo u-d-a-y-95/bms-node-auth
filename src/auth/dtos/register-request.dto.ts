@@ -1,8 +1,8 @@
 import { IsEmail, IsNotEmpty, IsString, Length } from "class-validator";
 
 export class RegisterRequestPayloadDto {
-  @IsNotEmpty({ message: "Username is required" })
-  @IsString({ message: "Username must be a string" })
+  @IsNotEmpty({ message: "Name is required" })
+  @IsString({ message: "Name must be a string" })
   name: string;
 
   @IsNotEmpty({ message: "Email is required" })

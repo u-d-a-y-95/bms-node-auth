@@ -11,8 +11,8 @@ export const app = express();
 app.use(express.json());
 app.use(responseMiddleware);
 app.use(routes);
-app.get("/", (_req: Request, res: Response, _next: NextFunction) => {
-  res.success({ data: "hello" });
+app.get("/health", (_req: Request, res: Response, _next: NextFunction) => {
+  res.success({ data: "ok" });
 });
 
 app.use(errorMiddleware);
