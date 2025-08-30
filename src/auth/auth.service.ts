@@ -7,6 +7,17 @@ import { CONFIG } from "@/config";
 
 @injectable()
 export class AuthService {
+  private privateKey: Buffer;
+  private publicKey: Buffer;
+
+  constructor() {
+    this.privateKey = fs.readFileSync(
+      path.join(__dirname, "../..", "certs", "private.pem"),
+    );
+    this.publicKey = fs.readFileSync(
+      path.join(__dirname, "../..", "certs", "public.pem"),
+    );
+  }
   isValidPassword(password: string, hashedPassword: string) {
     return compareHash(password, hashedPassword);
   }
@@ -21,11 +32,8 @@ export class AuthService {
 
   getAccessToken(data: JwtPayload) {
     try {
-      const secret = fs.readFileSync(
-        path.join(__dirname, "../..", "certs", "private.pem"),
-      );
       const expiresIn = this.getAccessTokenExpireTime();
-      return jwt.sign(data, secret, {
+      return jwt.sign(data, this.privateKey, {
         algorithm: "RS256",
         expiresIn,
         issuer: CONFIG.SERVICE_NAME,
@@ -51,9 +59,10 @@ export class AuthService {
   }
 
   verifyAccessToken(token: string) {
-    const publicKey = fs.readFileSync(
-      path.join(__dirname, "../..", "certs", "public.pem"),
-    );
-    return jwt.verify(token, publicKey);
+    return jwt.verify(token, this.publicKey);
+  }
+
+  verifyRefreshToken(token: string) {
+    return jwt.verify(token, CONFIG.JWT_REFRESH_TOKEN_SECRET || "");
   }
 }

@@ -21,5 +21,5 @@ authRoutes.post(
   validate(LoginRequestPayloadDto),
   authController.login,
 );
-
+authRoutes.get("/refresh", authController.refresh);
 authRoutes.post("/logout", authenticMiddleware, authController.logout);

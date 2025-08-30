@@ -1,5 +1,6 @@
 import { AuthService } from "@/auth/auth.service";
 import { Request, Response, NextFunction } from "express";
+import { UnauthenticError } from "../error";
 // import { TokenExpiredError, JsonWebTokenError } from "jsonwebtoken";
 
 export const authenticMiddleware = (
@@ -8,7 +9,7 @@ export const authenticMiddleware = (
   next: NextFunction,
 ) => {
   const cookie = (req.cookies as { access_token: string }).access_token;
-  if (!cookie) return res.error({ status: 401, error: "Unauthentic user" });
+  if (!cookie) return res.error(new UnauthenticError());
   const authService = new AuthService();
   try {
     const user = authService.verifyAccessToken(cookie) as { id: string };
@@ -19,8 +20,7 @@ export const authenticMiddleware = (
     //   return res.error({ status: 401, error: "Unauthentic user" });
     // if (error instanceof JsonWebTokenError)
     //   return res.error({ status: 401, error: "Unauthentic user" });
-    return res.error({ status: 401, error: "Unauthentic user" });
+    return res.error(new UnauthenticError());
   }
-
   next();
 };

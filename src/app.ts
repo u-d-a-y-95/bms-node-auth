@@ -6,6 +6,7 @@ import {
   errorMiddleware,
   responseMiddleware,
 } from "@/lib/middlewares/response.middleware";
+import { NotFoundError } from "./lib/error";
 
 export const app = express();
 
@@ -16,5 +17,7 @@ app.use(routes);
 app.get("/health", (_req: Request, res: Response, _next: NextFunction) => {
   return res.success({ data: "ok" });
 });
+
+app.use((_req: Request, res: Response) => res.error(new NotFoundError()));
 
 app.use(errorMiddleware);

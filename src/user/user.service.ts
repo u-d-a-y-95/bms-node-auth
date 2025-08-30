@@ -2,6 +2,7 @@ import { injectable } from "tsyringe";
 import { getHash } from "@/lib/bcrypt";
 import { UserRepository } from "./user.repository";
 import { QueryFailedError } from "typeorm";
+import { ConflictError, HttpError } from "@/lib/error";
 
 @injectable()
 export class UserService {
@@ -14,15 +15,15 @@ export class UserService {
       password: hashPassword,
     });
     try {
-      const savedUser = await this.userRepository.save(user);
+      const { password, ...savedUser } = await this.userRepository.save(user);
       return savedUser;
     } catch (error) {
       if (error instanceof QueryFailedError) {
         const { code } = error.driverError as { code?: string };
-        if (code === "23505") {
-          throw new Error("Email is already registered");
-        }
+        if (code === "23505")
+          throw new ConflictError("Email is already registered");
       }
+      throw new HttpError(500, "Something went wrong");
     }
   }
 
