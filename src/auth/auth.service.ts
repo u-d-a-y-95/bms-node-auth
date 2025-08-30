@@ -12,11 +12,11 @@ export class AuthService {
   }
 
   getAccessTokenExpireTime() {
-    return CONFIG.JWT_ACCESS_TOKEN_EXPIREIN * 60 * 1000;
+    return CONFIG.JWT_ACCESS_TOKEN_EXPIREIN * 60;
   }
 
   getRefreshTokenExpireTime() {
-    return CONFIG.JWT_REFRESH_TOKEN_EXPIREIN * 60 * 1000;
+    return CONFIG.JWT_REFRESH_TOKEN_EXPIREIN * 60;
   }
 
   getAccessToken(data: JwtPayload) {
@@ -48,5 +48,12 @@ export class AuthService {
     } catch (_error) {
       return null;
     }
+  }
+
+  verifyAccessToken(token: string) {
+    const publicKey = fs.readFileSync(
+      path.join(__dirname, "../..", "certs", "public.pem"),
+    );
+    return jwt.verify(token, publicKey);
   }
 }

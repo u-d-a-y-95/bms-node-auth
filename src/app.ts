@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import express, { Response, Request, NextFunction } from "express";
+import cookieParser from "cookie-parser";
 import { routes } from "./routes";
 import {
   errorMiddleware,
@@ -9,10 +10,11 @@ import {
 export const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(responseMiddleware);
 app.use(routes);
 app.get("/health", (_req: Request, res: Response, _next: NextFunction) => {
-  res.success({ data: "ok" });
+  return res.success({ data: "ok" });
 });
 
 app.use(errorMiddleware);

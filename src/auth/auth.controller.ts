@@ -11,6 +11,7 @@ export class AuthController {
     private userService: UserService,
     private authService: AuthService,
   ) {}
+
   register = async (req: Request, res: Response) => {
     const data = req.body as RegisterRequestPayloadDto;
     try {
@@ -54,5 +55,11 @@ export class AuthController {
       maxAge: this.authService.getRefreshTokenExpireTime(),
     });
     return res.success({ data: { id: user.id } });
+  };
+
+  logout = (_req: Request, res: Response) => {
+    res.clearCookie("access_token");
+    res.clearCookie("refresh_token");
+    return res.success({ data: {} });
   };
 }
