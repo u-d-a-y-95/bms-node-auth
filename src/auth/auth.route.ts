@@ -3,6 +3,7 @@ import { container } from "tsyringe";
 import { AuthController } from "./auth.controller";
 import { RegisterRequestPayloadDto } from "./dtos/register-request.dto";
 import { validate } from "@/lib/middlewares/validate.middleware";
+import { LoginRequestPayloadDto } from "./dtos/login-request.dto";
 
 export const authRoutes = express.Router();
 
@@ -12,4 +13,10 @@ authRoutes.post(
   "/register",
   validate(RegisterRequestPayloadDto),
   authController.register,
+);
+
+authRoutes.post(
+  "/login",
+  validate(LoginRequestPayloadDto),
+  authController.login,
 );

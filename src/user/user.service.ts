@@ -6,6 +6,7 @@ import { QueryFailedError } from "typeorm";
 @injectable()
 export class UserService {
   constructor(private userRepository: UserRepository) {}
+
   async createUser(data: { name: string; email: string; password: string }) {
     const hashPassword = await getHash(data.password);
     const user = this.userRepository.create({
@@ -23,5 +24,9 @@ export class UserService {
         }
       }
     }
+  }
+
+  getUserByEmail(email: string) {
+    return this.userRepository.findOneBy({ email });
   }
 }

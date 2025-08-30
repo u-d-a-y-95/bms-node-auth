@@ -24,7 +24,7 @@ export const responseMiddleware = (
 
     logger.info({ success, status, message, data });
 
-    return res.status(status).json({
+    res.status(status).json({
       success,
       status,
       message,
@@ -42,8 +42,7 @@ export const responseMiddleware = (
     } = options;
 
     logger.error({ success, status, message, error });
-
-    return res.status(status).json({
+    res.status(status).json({
       success,
       status,
       message,
