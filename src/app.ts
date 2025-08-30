@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import path from "path";
 import express, { Response, Request, NextFunction } from "express";
 import cookieParser from "cookie-parser";
 import { routes } from "./routes";
@@ -12,6 +13,11 @@ export const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
+
+app.use(
+  "/public",
+  express.static(path.join(__dirname, "..", "public"), { dotfiles: "allow" }),
+);
 app.use(responseMiddleware);
 app.use(routes);
 app.get("/health", (_req: Request, res: Response, _next: NextFunction) => {

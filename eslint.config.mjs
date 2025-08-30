@@ -12,6 +12,7 @@ export default tseslint.config(
       "lint-staged.config.mjs",
       "commitlint.config.mjs",
       "jest.config.js",
+      "generate-jwks.ts",
     ],
   },
   {
